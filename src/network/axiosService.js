@@ -22,38 +22,41 @@ class AxiosService {
   }
 
   get(url, params, config = {}) {
+    config.validateStatus = () => true;
     return this.instance
       .get(url, { params, ...config })
-      .then(({ data }) => {
-        return { data: data.data, meta: data.meta };
+      .then((res) => {
+        return res.data;
       })
       .catch((error) => this.errorHandling(error));
   }
 
   post(url, params, config = {}) {
+    config.validateStatus = () => true;
     return this.instance
       .post(url, params, config)
-      .then(({ data }) => {
-        return { data: data.data, meta: data.meta };
+      .then((res) => {
+        return res.data;
       })
       .catch((error) => this.errorHandling(error));
   }
 
   delete(url, params, config = {}) {
+    config.validateStatus = () => true;
     return this.instance
       .delete(url, config)
-      .then(({ data }) => {
-        return { data: data.data, meta: data.meta };
+      .then((res) => {
+        return res.data;
       })
-
       .catch(this.errorHandling);
   }
 
   put(url, params, config = {}) {
+    config.validateStatus = () => true;
     return this.instance
       .put(url, params, config)
-      .then(({ data }) => {
-        return { data: data.data, meta: data.meta };
+      .then((res) => {
+        return res.data;
       })
       .catch(this.errorHandling);
   }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Card, Button, Pagination } from "react-bootstrap";
+import { Row, Col, Button, Pagination } from "react-bootstrap";
 
 import Aux from "../../hoc/_Aux";
 import { axiosInstance } from "../../network/axiosService";
@@ -65,7 +65,6 @@ class Home extends React.Component {
       axiosInstance
         .get(Endpoints.lists + "?page=" + p.toString())
         .then((res) => {
-          console.log("adada", res);
           if (res.meta.status === DEMO.STATUS_OK) {
             this.setState({
               ...this.state,
@@ -104,102 +103,17 @@ class Home extends React.Component {
     axiosInstance
       .get(Endpoints.lists)
       .then((res) => {
-        if (res) {
-          if (res.meta.status === DEMO.STATUS_OK) {
-            this.setState({
-              ...this.state,
-              tasks: res.data,
-              current_page: res.meta.pagination.current_page,
-              last_page: res.meta.pagination.last_page,
-            });
-          }
+        if (res && res.meta.status === DEMO.STATUS_OK) {
+          this.setState({
+            ...this.state,
+            tasks: res.data,
+            current_page: res.meta.pagination.current_page,
+            last_page: res.meta.pagination.last_page,
+          });
         }
       })
       .catch((e) => console.log(e));
   }
-
-  onChangeSelectBox = (e) => {
-    this.setState({
-      ...this.state,
-      selectedListId: e.target.value,
-    });
-  };
-  onChangeTaskName = (e) => {
-    this.setState({
-      ...this.state,
-      taskName: e.target.value,
-    });
-  };
-  onChangeTaskDescription = (e) => {
-    this.setState({
-      ...this.state,
-      taskDescription: e.target.value,
-    });
-  };
-
-  onChangeStatus = (e) => {
-    this.setState({
-      ...this.state,
-      taskStatus: e.target.value,
-    });
-  };
-
-  onChangeListName = (e) => {
-    this.setState({
-      ...this.state,
-      listName: e.target.value,
-    });
-  };
-  onChangeListDescription = (e) => {
-    this.setState({
-      ...this.state,
-      listDescription: e.target.value,
-    });
-  };
-
-  onChangeListStatus = (e) => {
-    this.setState({
-      ...this.state,
-      listStatus: e.target.value,
-    });
-  };
-
-  createTask = () => {
-    axiosInstance
-      .post(Endpoints.tasks, {
-        name: this.state.taskName,
-        description: this.state.taskDescription,
-        to_do_list_id: this.state.selectedListId,
-        status: this.state.taskStatus,
-      })
-      .then((res) => {
-        if (res.meta.status === DEMO.STATUS_OK) {
-          this.setState({
-            ...this.state,
-            show: false,
-          });
-        }
-      })
-      .catch((e) => console.log(e));
-  };
-
-  createList = () => {
-    axiosInstance
-      .post(Endpoints.lists, {
-        name: this.state.listName,
-        description: this.state.listDescription,
-        status: this.state.listStatus,
-      })
-      .then((res) => {
-        if (res.meta.status === DEMO.STATUS_OK) {
-          this.setState({
-            ...this.state,
-            showListModal: false,
-          });
-        }
-      })
-      .catch((e) => console.log(e));
-  };
 
   render() {
     if (!this.checkToken()) {

@@ -3,7 +3,6 @@ import { Card, Col, Table } from "react-bootstrap";
 import { axiosInstance } from "../../network/axiosService";
 import { Endpoints } from "../../network/endpoints";
 import SingleTask from "./singleTask";
-import DEMO from "../../store/constant";
 
 export default class SingleList extends React.Component {
   constructor(props) {

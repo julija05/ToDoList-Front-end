@@ -16,7 +16,7 @@ export default class TaskModal extends React.Component {
       taskDate: moment(Date.now()).format(DEMO.DATE_FORMAT),
       taskName: props.taskName,
       taskDescription: props.taskDescription,
-      taskStatus: props.taskStatus,
+      taskStatus: props.taskStatus ? props.taskStatus : DEMO.PRIVATE,
       selectedListId: props.selectedListId,
       taskId: props.taskId,
       lists: [],
@@ -54,10 +54,17 @@ export default class TaskModal extends React.Component {
       .get(Endpoints.lists)
       .then((res) => {
         if (res && res.meta.status === 200) {
-          this.setState({
-            ...this.state,
-            lists: res.data,
-          });
+          let listId = 0;
+          if (res.data) {
+            if (res.data.length > 0) {
+              listId = res.data[0].id;
+            }
+            this.setState({
+              ...this.state,
+              lists: res.data,
+              selectedListId: listId,
+            });
+          }
         } else {
           this.setState({
             ...this.state,
@@ -121,12 +128,13 @@ export default class TaskModal extends React.Component {
         .then((res) => {
           if (res && res.meta.status === DEMO.STATUS_OK) {
             this.handleClose();
-          }
-          this.setState({
-            ...this.state,
-            err: true,
-            errMessage: "Invalid Input",
-          });
+            return;
+          } else
+            this.setState({
+              ...this.state,
+              err: true,
+              errMessage: "Invalid Input",
+            });
         })
         .catch((e) => console.log(e));
       return;
@@ -143,12 +151,15 @@ export default class TaskModal extends React.Component {
       .then((res) => {
         if (res && res.meta.status === DEMO.STATUS_OK) {
           this.handleClose();
+          return;
+        } else {
+          let errMsg = [...res.data].toString().split(",");
+          this.setState({
+            ...this.state,
+            err: true,
+            errMessage: errMsg,
+          });
         }
-        this.setState({
-          ...this.state,
-          err: true,
-          errMessage: "Invalid Input",
-        });
       })
       .catch((e) => console.log(e));
   };

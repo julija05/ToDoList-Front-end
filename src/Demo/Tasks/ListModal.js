@@ -11,7 +11,7 @@ export default class ListModal extends Component {
     super(props);
     this.state = {
       listName: "",
-      listStatus: "",
+      listStatus: props.status ? props.status : DEMO.PRIVATE,
       listDescription: "",
       showListModal: props.show,
       err: false,
@@ -57,10 +57,11 @@ export default class ListModal extends Component {
             showListModal: this.handleListClose(),
           });
         } else {
+          let errMsg = res.data.toString().split(",").join("\r\n");
           this.setState({
             ...this.state,
             err: true,
-            errMessage: "Invalid Input",
+            errMessage: errMsg,
           });
         }
       })
@@ -82,12 +83,12 @@ export default class ListModal extends Component {
             <FormGroup>
               <FloatingLabel
                 controlId="floatingTextarea"
-                label="Task name"
+                label="List Name"
                 className="mb-3"
                 onChange={(e) => this.onChangeListName(e)}
               >
                 <input
-                  placeholder="Leave a task name here"
+                  placeholder="Leave a List Name here"
                   value={this.state.listName}
                 />
               </FloatingLabel>
