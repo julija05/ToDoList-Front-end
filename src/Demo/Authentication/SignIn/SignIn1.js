@@ -42,7 +42,7 @@ class SignUp1 extends React.Component {
         password: this.state.password,
       })
       .then((res) => {
-        if (res && res.meta.status === DEMO.STATUS_OK) {
+        if (res.meta && res.meta.status === DEMO.STATUS_OK) {
           localStorage.setItem("token", res.meta.token);
           localStorage.setItem("currentUser", res.data.username);
           localStorage.setItem("current_id", res.data.id);
@@ -51,13 +51,11 @@ class SignUp1 extends React.Component {
             loggedIn: true,
             errMessage: "",
           });
-        }
-        if (!res) {
-          console.log("else", res);
+        } else if (!res.status) {
           this.setState({
             ...this.state,
             loggedIn: false,
-            errMessage: "Check your email and password again!",
+            errMessage: "Check your email and password",
           });
         }
       })
